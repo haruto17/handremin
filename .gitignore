@@ -1,0 +1,5 @@
+server.ts
+deno.json
+deno.lock
+.prettierrc
+/check
