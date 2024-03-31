@@ -7,10 +7,11 @@
     <script>
       window.addEventListener("DOMContentLoaded", function () {
         const right_hand = document.getElementById("rightHand");
-
+        const osc = new Tone.Oscillator(440, "sine").toDestination();
         right_hand.addEventListener("pinchmoved", function (event) {
           var sphere = document.getElementById("sphere");
           sphere.setAttribute("position", event.detail.position);
+          osc.start();
         });
       });
     </script>
