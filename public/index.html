@@ -8,8 +8,13 @@
       let distance = 0;
       let osc = new Tone.Oscillator(440, "sine").toDestination();
 
-      function calculateDistance(pinchPosition) {
-        let el = document.getElementById("rightCylinder");
+      function calculateDistance(pinchPosition, hand) {
+        let el;
+        if (hand === "right") {
+          el = document.getElementById("rightCylinder");
+        } else if (hand === "left") {
+          el = document.getElementById("leftCylinder");
+        }
         let cylinderPosition = el.object3D.position;
         return cylinderPosition.distanceTo(pinchPosition);
       }
@@ -17,19 +22,29 @@
       window.addEventListener("DOMContentLoaded", function () {
         osc.toMaster();
         const right_hand = document.getElementById("rightHand");
+        const left_hand = document.getElementById("leftHand");
 
         right_hand.addEventListener("pinchstarted", function () {
           osc.start();
         });
 
         right_hand.addEventListener("pinchmoved", function (event) {
-          distance = calculateDistance(event.detail.position);
+          let distance = calculateDistance(event.detail.position, "right");
           let frequency = distance * 1000;
           osc.frequency.value = frequency;
         });
 
         right_hand.addEventListener("pinchended", function () {
           osc.stop();
+        });
+
+        left_hand.addEventListener("pinchmoved", function (event) {
+          let distance = calculateDistance(event.detail.position, "left");
+          let volume = distance * 100.0;
+          if (volume > 50.0) {
+            volume = 50.0;
+          }
+          osc.volume.value = volume;
         });
       });
     </script>
