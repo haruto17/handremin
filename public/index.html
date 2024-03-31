@@ -5,15 +5,27 @@
     <script src="https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <script>
+      let distance = 0;
+      let osc = new Tone.Oscillator(440, "sine").toDestination();
+
+      function calculateDistance(pinchPosition) {
+        let el = document.getElementById("rightCylinder");
+        let cylinderPosition = el.object3D.position;
+        return cylinderPosition.distanceTo(pinchPosition);
+      }
+
       window.addEventListener("DOMContentLoaded", function () {
         const right_hand = document.getElementById("rightHand");
-        const osc = new Tone.Oscillator(440, "sine").toDestination();
-        right_hand.addEventListener("pinchmoved", function (event) {
-          var sphere = document.getElementById("sphere");
-          sphere.setAttribute("position", event.detail.position);
+
+        right_hand.addEventListener("pinchstarted", function () {
           osc.start();
         });
-        right_hand.addEventListener("pinchended", function (event) {
+
+        right_hand.addEventListener("pinchmoved", function (event) {
+          distance = calculateDistance(event.detail.position);
+          console.log(distance);
+        });
+        right_hand.addEventListener("pinchended", function () {
           osc.stop();
         });
       });
