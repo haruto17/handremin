@@ -13,6 +13,9 @@
           sphere.setAttribute("position", event.detail.position);
           osc.start();
         });
+        right_hand.addEventListener("pinchended", function (event) {
+          osc.stop();
+        });
       });
     </script>
   </head>
